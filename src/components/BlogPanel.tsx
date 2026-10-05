@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { POSTS } from '../data'
+import { GoofyFace } from './Icons'
 import { useScrollLock } from '../hooks/useSmoothScroll'
 
 type Props = {
@@ -58,7 +58,7 @@ export function BlogPanel({ open, onClose }: Props) {
       <aside
         ref={panel}
         className={`blog-panel${open ? ' open' : ''}`}
-        aria-label="Blog posts"
+        aria-label="Writing"
         aria-hidden={!open}
         inert={!open}
       >
@@ -70,40 +70,13 @@ export function BlogPanel({ open, onClose }: Props) {
             ref={closeBtn}
             className="blog-close"
             onClick={onClose}
-            aria-label="Close blog posts"
+            aria-label="Close writing"
           />
         </div>
 
-        <p className="blog-note">
-          Everything here is <em>coming soon</em>, which is a phrase doing an
-          enormous amount of work. The thinking is done. The outlines are in a
-          file called <code>drafts/</code> that I open on Sundays and close on
-          Sundays. What remains is the writing, and the writing is the part
-          where you find out whether you meant any of it.
-        </p>
-
-        <div className="blog-list">
-          {POSTS.map((post, i) => (
-            <article
-              className="blog-post"
-              key={post.n}
-              style={{ ['--d' as string]: `${260 + i * 75}ms` }}
-            >
-              <div className="blog-top">
-                <span className="m-sm">{post.n}</span>
-                <span className="m-sm">{post.meta}</span>
-              </div>
-              <h3>{post.title}</h3>
-              <p className="blog-kicker">{post.kicker}</p>
-              <span className="blog-status" data-s={post.status}>
-                {post.status}
-              </span>
-            </article>
-          ))}
-        </div>
-
-        <div className="blog-foot">
-          <span className="m-sm">no rss yet. no newsletter. no subscribe modal. just this.</span>
+        <div className="blog-empty">
+          <GoofyFace />
+          <p>coming soon</p>
         </div>
       </aside>
     </>

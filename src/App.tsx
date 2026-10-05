@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: 'contact', label: 'contact' },
 ]
 
-/** `# heading ————————— count` — the one section marker, used everywhere. */
+/** The one section marker: a hash, the title, a rule, an optional count. */
 function SecHead({ title, count }: { title: string; count?: string }) {
   return (
     <div className="sec-head">
@@ -128,7 +128,7 @@ function Hero() {
       </span>
 
       <h1>Hey, I&rsquo;m Korede</h1>
-      <p className="hero-role">software engineer — dallas, tx</p>
+      <p className="hero-role">software engineer, dallas tx</p>
 
       <div className="hero-links">
         <a className="chip chip-link" href={PROFILE.github} target="_blank" rel="noreferrer">
@@ -154,7 +154,7 @@ function Hero() {
         </p>
         <p>
           The last two summers I was at <strong>Cisco</strong> and <strong>Splunk</strong> on
-          backend and platform work — writing Go, designing a cell-based service, arguing with
+          backend and platform work: writing Go, designing a cell-based service, arguing with
           Kubernetes, and learning that the hard part is almost never the code.
         </p>
         <p>
@@ -163,7 +163,7 @@ function Hero() {
           a few hundred students a year.
         </p>
         <p>
-          Outside of that: pickleball, hiking, soccer, 3D printing, and writing — which is why
+          Outside of that: pickleball, hiking, soccer, 3D printing, and writing, which is why
           there is a writing tab with nothing in it yet.
         </p>
       </div>
@@ -344,7 +344,7 @@ function Contact() {
       <SecHead title="contact" />
       <div className="reveal">
         <p className="contact-copy">
-          Looking for a new grad software engineering role for 2027 — backend, infrastructure,
+          Looking for a new grad software engineering role for 2027: backend, infrastructure,
           distributed systems. Email is the fastest way to reach me.
         </p>
         <div className="contact-grid">

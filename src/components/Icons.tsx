@@ -41,3 +41,28 @@ export function ArrowIcon({ className }: P) {
     </svg>
   )
 }
+
+/** A face that has not written anything yet. */
+export function GoofyFace({ className }: P) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="32" cy="32" r="23" />
+      {/* one eye squinting, one wide open */}
+      <path d="M19 26.5c1.6-2 4.4-2 6 0" />
+      <circle cx="43" cy="27" r="2.6" fill="currentColor" stroke="none" />
+      {/* an undecided mouth */}
+      <path d="M20 41q5 6 10 0t10 0" />
+      {/* a thought that never arrived */}
+      <path d="M50 13.5h.01M55 9h.01" strokeWidth="3" />
+    </svg>
+  )
+}

@@ -18,7 +18,7 @@ export function useSmoothScroll() {
 
     const instance = new Lenis({
       duration: 1.1,
-      // gentle exponential ease-out — carries momentum without feeling slippery
+      // gentle exponential ease-out, carries momentum without feeling slippery
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       touchMultiplier: 1.6,
