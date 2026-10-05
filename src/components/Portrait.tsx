@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { PROFILE } from '../data'
 
-const RADIUS = 132
+const RADIUS = 136
 
 /**
- * Edge-detected line art by default; the real photograph is masked to a soft
- * disc that chases the pointer. The photo is the only colour on the site.
+ * Pen-and-ink line drawing by default; the real photograph is masked to a soft
+ * disc that chases the pointer. The photo is the only full-colour thing here.
  */
 export function Portrait() {
   const frame = useRef<HTMLDivElement>(null)
   const real = useRef<HTMLImageElement>(null)
-  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     const box = frame.current
@@ -43,8 +42,8 @@ export function Portrait() {
     }
 
     const tick = () => {
-      now.x += (target.x - now.x) * 0.17
-      now.y += (target.y - now.y) * 0.17
+      now.x += (target.x - now.x) * 0.18
+      now.y += (target.y - now.y) * 0.18
       now.r += (target.r - now.r) * 0.1
 
       layer.style.setProperty('--mx', `${(now.x * 100).toFixed(2)}%`)
@@ -69,20 +68,8 @@ export function Portrait() {
 
   return (
     <figure className="portrait-frame">
-      <span className="tick tl" aria-hidden="true" />
-      <span className="tick tr" aria-hidden="true" />
-      <span className="tick bl" aria-hidden="true" />
-      <span className="tick br" aria-hidden="true" />
-
-      <div className="portrait" ref={frame} data-cursor="hot">
-        <img
-          className="sketch"
-          src={PROFILE.photo}
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          onLoad={() => setLoaded(true)}
-        />
+      <div className="portrait" ref={frame}>
+        <img className="sketch" src={PROFILE.photo} alt="" aria-hidden="true" draggable={false} />
         <img
           ref={real}
           className="real"
@@ -93,15 +80,18 @@ export function Portrait() {
       </div>
 
       <figcaption className="portrait-caption">
-        <span className="mono">Fig. 01 — the subject</span>
-        <span className="mono">{loaded ? 'hover to resolve' : 'loading…'}</span>
+        <span className="label">Korede Afolami</span>
+        <span className="label portrait-hint">
+          <span className="ring" />
+          Hover to develop
+        </span>
       </figcaption>
     </figure>
   )
 }
 
-/** The edge-detect filter the sketch layer points at. Rendered once, off-screen. */
-export function SketchFilter() {
+/** The filter the sketch layer points at. Rendered once, off-screen. */
+export function InkFilter() {
   return (
     <svg
       width="0"
@@ -111,7 +101,7 @@ export function SketchFilter() {
       style={{ position: 'absolute', pointerEvents: 'none' }}
     >
       <filter
-        id="edge-sketch"
+        id="ink-sketch"
         x="0%"
         y="0%"
         width="100%"
@@ -132,7 +122,7 @@ export function SketchFilter() {
         {/* soften JPEG grain so the edge pass finds contours, not noise */}
         <feGaussianBlur in="lift" stdDeviation="0.8" result="soft" />
 
-        {/* 8-neighbour laplacian — bright contours on black */}
+        {/* 8-neighbour laplacian — contours come out bright on black */}
         <feConvolveMatrix
           in="soft"
           order="3"
@@ -142,11 +132,17 @@ export function SketchFilter() {
           result="edges"
         />
 
-        {/* push the surviving contours up to white */}
-        <feComponentTransfer in="edges">
+        <feComponentTransfer in="edges" result="amped">
           <feFuncR type="linear" slope="5" />
           <feFuncG type="linear" slope="5" />
           <feFuncB type="linear" slope="5" />
+        </feComponentTransfer>
+
+        {/* flip it: dark ink on white paper */}
+        <feComponentTransfer in="amped">
+          <feFuncR type="table" tableValues="1 0" />
+          <feFuncG type="table" tableValues="1 0" />
+          <feFuncB type="table" tableValues="1 0" />
         </feComponentTransfer>
       </filter>
     </svg>
