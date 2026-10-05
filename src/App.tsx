@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { EDUCATION, EXPERIENCE, LEADERSHIP, PROFILE, PROJECTS, SKILLS } from './data'
-import { Portrait, InkFilter } from './components/Portrait'
+import { Portrait } from './components/Portrait'
 import { BlogPanel } from './components/BlogPanel'
 import {
   ArrowIcon,
@@ -456,7 +456,6 @@ export default function App() {
 
   return (
     <>
-      <InkFilter />
       <Nav onBlog={openBlog} />
 
       <main>

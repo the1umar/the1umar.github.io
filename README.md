@@ -2,8 +2,7 @@
 
 Personal site for Korede (Umar) Afolami — [the1umar.github.io](https://the1umar.github.io)
 
-Warm off-white paper, near-black ink, one molten accent (`#ff4a1c`). The
-portrait is a pen-and-ink line drawing until you move the cursor over it.
+Warm off-white paper, near-black ink, one molten accent (`#ff4a1c`).
 
 ## Stack
 
@@ -14,22 +13,6 @@ portrait is a pen-and-ink line drawing until you move the cursor over it.
 - Plain CSS with custom properties. No Tailwind, no CSS-in-JS, no animation
   library — the motion is `IntersectionObserver` + `requestAnimationFrame` +
   transitions
-
-## The portrait effect
-
-`src/components/Portrait.tsx` stacks two copies of the same JPEG:
-
-1. **Base layer** runs an SVG filter chain (`#ink-sketch`): desaturate →
-   stretch levels → slight blur → 8-neighbour laplacian convolution → amplify
-   → invert. The level stretch matters: a dark subject against a dark
-   background gives the edge pass almost nothing to work with without it. The
-   final inversion is what turns bright-lines-on-black into ink on paper.
-2. **Top layer** is the untouched photo, masked by a `radial-gradient` whose
-   centre and radius are CSS custom properties, lerped toward the pointer on
-   every animation frame.
-
-On touch devices (`hover: none`) the sketch layer is dropped and the photograph
-shows plainly — there is no cursor to chase it with.
 
 ## Editing content
 
