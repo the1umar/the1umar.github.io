@@ -34,65 +34,11 @@ npm run preview  # serve the built bundle
 
 ## Deploying
 
-```sh
-npm run deploy   # builds, then force-pushes dist/ to the gh-pages branch
-```
+Pushing to `main` is the deploy. `.github/workflows/deploy.yml` builds the site
+and publishes it to GitHub Pages; nothing is built on a laptop and no `dist/`
+is committed anywhere.
 
-GitHub Pages is configured to serve the `gh-pages` branch at the repository
-root.
-
-### Optional: deploy from GitHub Actions instead
-
-A workflow is tidier than deploying from a laptop, but pushing a file under
-`.github/workflows/` needs the `workflow` OAuth scope. To switch:
-
-```sh
-gh auth refresh -s workflow
-```
-
-Then add `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to Pages
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
-
-Finally switch the Pages source from the `gh-pages` branch to **GitHub Actions**
-in repository settings.
+Pages originally used the legacy branch builder against a `gh-pages` branch.
+That builder stalled mid-build with no error and had to be cancelled, so the
+site now builds in Actions instead. The `gh-pages` branch and the hand-rolled
+deploy script are gone.
