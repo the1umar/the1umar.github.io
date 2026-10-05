@@ -1,30 +1,36 @@
 import { useCallback, useEffect, useState } from 'react'
 import { EDUCATION, EXPERIENCE, LEADERSHIP, PROFILE, PROJECTS, SKILLS } from './data'
-import { Portrait } from './components/Portrait'
 import { BlogPanel } from './components/BlogPanel'
-import {
-  ArrowIcon,
-  DocIcon,
-  GitHubIcon,
-  LinkedInIcon,
-  MailIcon,
-} from './components/Icons'
+import { DocIcon, GitHubIcon, LinkedInIcon, MailIcon } from './components/Icons'
 import { useRevealGroup } from './hooks/useReveal'
 import { scrollToId, useSmoothScroll } from './hooks/useSmoothScroll'
 
 const SECTIONS = [
-  { id: 'work', label: 'Work' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'experience', label: 'experience' },
+  { id: 'projects', label: 'projects' },
+  { id: 'stack', label: 'stack' },
+  { id: 'contact', label: 'contact' },
 ]
+
+/** `# heading ————————— count` — the one section marker, used everywhere. */
+function SecHead({ title, count }: { title: string; count?: string }) {
+  return (
+    <div className="sec-head">
+      <h2>
+        <span className="hash">#</span> {title}
+      </h2>
+      <span className="rule" />
+      {count ? <span className="count">{count}</span> : null}
+    </div>
+  )
+}
 
 function Nav({ onBlog }: { onBlog: () => void }) {
   const [stuck, setStuck] = useState(false)
   const [active, setActive] = useState('')
 
   useEffect(() => {
-    const onScroll = () => setStuck(window.scrollY > 20)
+    const onScroll = () => setStuck(window.scrollY > 12)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -32,12 +38,11 @@ function Nav({ onBlog }: { onBlog: () => void }) {
 
   useEffect(() => {
     const io = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((e) => {
           if (e.isIntersecting) setActive(e.target.id)
-        })
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
+        }),
+      { rootMargin: '-40% 0px -55% 0px' },
     )
     SECTIONS.forEach(({ id }) => {
       const el = document.getElementById(id)
@@ -48,19 +53,18 @@ function Nav({ onBlog }: { onBlog: () => void }) {
 
   return (
     <nav className={`nav${stuck ? ' stuck' : ''}`}>
-      <a
-        className="nav-mark"
-        href="#top"
-        onClick={(e) => {
-          e.preventDefault()
-          scrollToId('top')
-        }}
-      >
-        <span className="sq" />
-        Korede Afolami
-      </a>
+      <div className="wrap nav-in">
+        <a
+          className="nav-mark"
+          href="#top"
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToId('top')
+          }}
+        >
+          <span className="br">[</span>ka<span className="br">]</span>
+        </a>
 
-      <div className="nav-right">
         <div className="nav-links">
           {SECTIONS.map(({ id, label }) => (
             <a
@@ -76,17 +80,17 @@ function Nav({ onBlog }: { onBlog: () => void }) {
             </a>
           ))}
           <button className="nav-link blog-trigger" onClick={onBlog}>
-            Blog
+            writing
           </button>
         </div>
 
-        <div className="nav-social">
+        <div className="nav-icons">
           <a
             className="icon-btn"
             href={PROFILE.github}
             target="_blank"
             rel="noreferrer"
-            aria-label="Korede Afolami on GitHub"
+            aria-label="GitHub"
             title="GitHub"
           >
             <GitHubIcon />
@@ -96,7 +100,7 @@ function Nav({ onBlog }: { onBlog: () => void }) {
             href={PROFILE.linkedin}
             target="_blank"
             rel="noreferrer"
-            aria-label="Korede Afolami on LinkedIn"
+            aria-label="LinkedIn"
             title="LinkedIn"
           >
             <LinkedInIcon />
@@ -104,7 +108,7 @@ function Nav({ onBlog }: { onBlog: () => void }) {
           <a
             className="icon-btn"
             href={`mailto:${PROFILE.email}`}
-            aria-label={`Email ${PROFILE.name}`}
+            aria-label="Email"
             title="Email"
           >
             <MailIcon />
@@ -117,98 +121,85 @@ function Nav({ onBlog }: { onBlog: () => void }) {
 
 function Hero() {
   return (
-    <header className="hero shell" id="top">
-      <div className="hero-grid">
-        <div>
-          <span className="hero-eyebrow label">
-            <span className="dot" />
-            Open to 2027 new-grad roles
-          </span>
+    <header className="hero wrap" id="top">
+      <span className="avatar">
+        <img src={PROFILE.photo} alt={PROFILE.name} />
+      </span>
 
-          <h1 className="hero-name">
-            <span className="line">
-              <span style={{ ['--d' as string]: '80ms' }}>Korede</span>
-            </span>
-            <span className="line">
-              <span style={{ ['--d' as string]: '180ms' }} className="accent">
-                Afolami
-              </span>
-            </span>
-          </h1>
+      <h1>Hey, I&rsquo;m Korede</h1>
+      <p className="hero-role">software engineer — dallas, tx</p>
 
-          <p className="hero-blurb">{PROFILE.blurb}</p>
+      <div className="hero-links">
+        <a className="chip chip-link" href={PROFILE.github} target="_blank" rel="noreferrer">
+          <GitHubIcon /> github
+        </a>
+        <a className="chip chip-link" href={PROFILE.linkedin} target="_blank" rel="noreferrer">
+          <LinkedInIcon /> linkedin
+        </a>
+        <a className="chip chip-link" href={`mailto:${PROFILE.email}`}>
+          <MailIcon /> email
+        </a>
+        <a className="chip chip-link" href={PROFILE.resume} target="_blank" rel="noreferrer">
+          <DocIcon /> résumé
+        </a>
+      </div>
 
-          <div className="hero-facts">
-            <span className="pill">Software Engineer</span>
-            <span className="pill">Dallas, TX</span>
-            <span className="pill">Texas Tech &rsquo;26</span>
-            <span className="pill">GPA 3.9</span>
-          </div>
+      <div className="hero-rule" />
 
-          <div className="hero-actions">
-            <a className="btn primary" href={PROFILE.resume} target="_blank" rel="noreferrer">
-              <DocIcon /> Résumé
-            </a>
-            <a className="btn" href={PROFILE.github} target="_blank" rel="noreferrer">
-              <GitHubIcon /> GitHub
-            </a>
-            <a className="btn" href={PROFILE.linkedin} target="_blank" rel="noreferrer">
-              <LinkedInIcon /> LinkedIn
-            </a>
-          </div>
-        </div>
-
-        <Portrait />
+      <div className="hero-copy">
+        <p>
+          I&rsquo;m a CS senior at <strong>Texas Tech</strong>, most of the way through a math
+          minor, and most interested in the layer where a system stops being one machine.
+        </p>
+        <p>
+          The last two summers I was at <strong>Cisco</strong> and <strong>Splunk</strong> on
+          backend and platform work — writing Go, designing a cell-based service, arguing with
+          Kubernetes, and learning that the hard part is almost never the code.
+        </p>
+        <p>
+          Right now that means distributed systems, infrastructure, and the occasional compiler
+          assignment. Outside of that: ColorStack, TA office hours, and a blog I am perpetually
+          about to start.
+        </p>
       </div>
     </header>
   )
 }
 
-function Work() {
+function Experience() {
   const ref = useRevealGroup<HTMLElement>()
   return (
-    <section className="section" id="work" ref={ref}>
-      <div className="shell">
-        <div className="section-head reveal">
-          <span className="label label-accent">01</span>
-          <h2>Experience</h2>
-          <span className="rule" />
-        </div>
-
-        {EXPERIENCE.map((job) => (
-          <article className="xp-item reveal" key={job.org + job.period}>
-            <div className="xp-rail">
-              <span className="label">{job.period}</span>
-            </div>
+    <section className="section wrap" id="experience" ref={ref}>
+      <SecHead title="experience" count={String(EXPERIENCE.length).padStart(2, '0')} />
+      {EXPERIENCE.map((job) => (
+        <article className="row reveal" key={job.org + job.period}>
+          <div className="row-head">
+            <span className="tile">{job.mark}</span>
             <div>
-              <h3 className="xp-org">{job.org}</h3>
-              <p className="xp-title">
-                {job.title} · {job.place}
-                {job.current ? (
-                  <>
-                    {' '}
-                    <span className="badge-now">
-                      <span className="dot" /> current
-                    </span>
-                  </>
-                ) : null}
-              </p>
-              <ul className="points">
-                {job.points.map((p) => (
-                  <li key={p.slice(0, 40)}>{p}</li>
-                ))}
-              </ul>
-              <div className="chips">
-                {job.stack.map((s) => (
-                  <span className="chip" key={s}>
-                    {s}
-                  </span>
-                ))}
-              </div>
+              <h3 className="row-title">{job.title}</h3>
+              <p className="m-org">{job.org}</p>
             </div>
-          </article>
-        ))}
-      </div>
+            <div className="row-meta">
+              <span className="m-sm">{job.place}</span>
+              <span className="m-sm">{job.period}</span>
+            </div>
+          </div>
+          <div className="row-body">
+            <ul className="points">
+              {job.points.map((p) => (
+                <li key={p.slice(0, 40)}>{p}</li>
+              ))}
+            </ul>
+            <div className="chips">
+              {job.stack.map((s) => (
+                <span className="chip" key={s}>
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
     </section>
   )
 }
@@ -218,230 +209,160 @@ function Projects() {
   const [open, setOpen] = useState<string | null>(PROJECTS[0].index)
 
   return (
-    <section className="section" id="projects" ref={ref}>
-      <div className="shell">
-        <div className="section-head reveal">
-          <span className="label label-accent">02</span>
-          <h2>Projects</h2>
-          <span className="rule" />
-        </div>
+    <section className="section wrap" id="projects" ref={ref}>
+      <SecHead title="projects" count={String(PROJECTS.length).padStart(2, '0')} />
+      {PROJECTS.map((p) => {
+        const isOpen = open === p.index
+        return (
+          <article className="row reveal" key={p.index}>
+            <button
+              className="row-toggle"
+              aria-expanded={isOpen}
+              aria-controls={`p-${p.index}`}
+              onClick={() => setOpen(isOpen ? null : p.index)}
+            >
+              <div className="row-head">
+                <span className="tile">{p.index}</span>
+                <div>
+                  <h3 className="row-title">{p.name}</h3>
+                  <p className="m-org">{p.status}</p>
+                </div>
+                <div className="row-meta">
+                  <span className="m-sm">{p.period}</span>
+                </div>
+                <span className="row-plus" />
+              </div>
+            </button>
 
-        <div className="reveal">
-          {PROJECTS.map((p, i) => {
-            const isOpen = open === p.index
-            const last = i === PROJECTS.length - 1
-            return (
-              <div key={p.index} className={last && !isOpen ? 'proj-last' : undefined}>
-                <button
-                  className="proj-row"
-                  aria-expanded={isOpen}
-                  aria-controls={`proj-${p.index}`}
-                  onClick={() => setOpen(isOpen ? null : p.index)}
-                >
-                  <div className="proj-head">
-                    <span className="label">{p.period}</span>
-                    <span className="proj-name">{p.name}</span>
-                    <span className="proj-right">
-                      <span className="proj-toggle" />
-                    </span>
-                  </div>
-                </button>
-
-                <div className={`proj-body${isOpen ? ' open' : ''}`} id={`proj-${p.index}`}>
-                  <div>
-                    <div className="proj-inner">
-                      <span className="spacer" />
-                      <div>
-                        <p className="proj-summary">{p.summary}</p>
-                        <ul className="points">
-                          {p.points.map((pt) => (
-                            <li key={pt.slice(0, 40)}>{pt}</li>
-                          ))}
-                        </ul>
-                        <div className="chips">
-                          {p.stack.map((s) => (
-                            <span className="chip" key={s}>
-                              {s}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+            <div className={`collapse${isOpen ? ' open' : ''}`} id={`p-${p.index}`}>
+              <div>
+                <div className="row-body">
+                  <ul className="points">
+                    {p.points.map((pt) => (
+                      <li key={pt.slice(0, 40)}>{pt}</li>
+                    ))}
+                  </ul>
+                  <div className="chips">
+                    {p.stack.map((s) => (
+                      <span className="chip" key={s}>
+                        {s}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            )
-          })}
-        </div>
+            </div>
+          </article>
+        )
+      })}
+    </section>
+  )
+}
+
+function Stack() {
+  const ref = useRevealGroup<HTMLElement>()
+  return (
+    <section className="section wrap" id="stack" ref={ref}>
+      <SecHead title="stack" />
+      <div className="reveal">
+        {SKILLS.map((g) => (
+          <div className="group" key={g.label}>
+            <span className="m">{g.label.toLowerCase()}</span>
+            <div className="chips">
+              {g.items.map((i) => (
+                <span className="chip" key={i}>
+                  {i}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   )
 }
 
-function About() {
+function Education() {
   const ref = useRevealGroup<HTMLElement>()
   return (
-    <section className="section" id="about" ref={ref}>
-      <div className="shell">
-        <div className="section-head reveal">
-          <span className="label label-accent">03</span>
-          <h2>About</h2>
-          <span className="rule" />
-        </div>
-
-        <div className="about-grid">
-          <div className="about-copy reveal">
-            <p>
-              I&rsquo;m a computer science senior at <strong>Texas Tech</strong>, most of the
-              way through a math minor, and most interested in the layer where a system
-              stops being one machine.
-            </p>
-            <p>
-              The last two summers were spent at <strong>Cisco</strong> and{' '}
-              <strong>Splunk</strong> on backend and platform work — writing Go, designing a
-              cell-based service, arguing with Kubernetes, and learning that the hard part is
-              almost never the code.
-            </p>
-            <p>
-              Off the clock I&rsquo;m VP of <strong>ColorStack TTU</strong>, I TA data
-              structures for a few hundred students a year, and I am perpetually about to
-              start a blog.
-            </p>
+    <section className="section wrap" id="education" ref={ref}>
+      <SecHead title="education" />
+      <article className="row reveal">
+        <div className="row-head">
+          <span className="tile">TT</span>
+          <div>
+            <h3 className="row-title">{EDUCATION.school}</h3>
+            <p className="m-org">{EDUCATION.degree}</p>
           </div>
-
-          <div className="reveal">
-            <dl>
-              <div className="fact">
-                <dt className="label">Education</dt>
-                <dd>
-                  {EDUCATION.school}
-                  <span>
-                    {EDUCATION.degree} · GPA {EDUCATION.gpa} · Graduating {EDUCATION.grad}
-                  </span>
-                </dd>
-              </div>
-              <div className="fact">
-                <dt className="label">Leadership</dt>
-                <dd>
-                  {LEADERSHIP.org} — {LEADERSHIP.title}
-                  <span>{LEADERSHIP.points[0]}</span>
-                </dd>
-              </div>
-            </dl>
-
-            <div style={{ marginTop: 32 }}>
-              {SKILLS.map((group) => (
-                <div className="skill-block" key={group.label}>
-                  <span className="label">{group.label}</span>
-                  <ul className="skill-list">
-                    {group.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+          <div className="row-meta">
+            <span className="m-sm">{EDUCATION.place}</span>
+            <span className="m-sm">
+              GPA {EDUCATION.gpa} · {EDUCATION.grad}
+            </span>
           </div>
         </div>
-      </div>
+      </article>
+      <article className="row reveal">
+        <div className="row-head">
+          <span className="tile">CS</span>
+          <div>
+            <h3 className="row-title">{LEADERSHIP.title}</h3>
+            <p className="m-org">{LEADERSHIP.org}</p>
+          </div>
+          <div className="row-meta">
+            <span className="m-sm">{LEADERSHIP.period}</span>
+          </div>
+        </div>
+        <div className="row-body">
+          <ul className="points">
+            {LEADERSHIP.points.map((p) => (
+              <li key={p.slice(0, 30)}>{p}</li>
+            ))}
+          </ul>
+        </div>
+      </article>
     </section>
   )
 }
 
 const CARDS = [
-  {
-    icon: <MailIcon />,
-    title: 'Email',
-    sub: PROFILE.email,
-    href: `mailto:${PROFILE.email}`,
-    external: false,
-  },
-  {
-    icon: <LinkedInIcon />,
-    title: 'LinkedIn',
-    sub: PROFILE.linkedinLabel,
-    href: PROFILE.linkedin,
-    external: true,
-  },
-  {
-    icon: <GitHubIcon />,
-    title: 'GitHub',
-    sub: PROFILE.githubLabel,
-    href: PROFILE.github,
-    external: true,
-  },
-  {
-    icon: <DocIcon />,
-    title: 'Résumé',
-    sub: 'One page, PDF',
-    href: PROFILE.resume,
-    external: true,
-  },
+  { icon: <MailIcon />, t: 'email', s: PROFILE.email, href: `mailto:${PROFILE.email}`, ext: false },
+  { icon: <LinkedInIcon />, t: 'linkedin', s: PROFILE.linkedinLabel, href: PROFILE.linkedin, ext: true },
+  { icon: <GitHubIcon />, t: 'github', s: PROFILE.githubLabel, href: PROFILE.github, ext: true },
+  { icon: <DocIcon />, t: 'résumé', s: 'one page, pdf', href: PROFILE.resume, ext: true },
 ]
 
 function Contact() {
   const ref = useRevealGroup<HTMLElement>()
   return (
-    <section className="section" id="contact" ref={ref}>
-      <div className="shell">
-        <div className="section-head reveal">
-          <span className="label label-accent">04</span>
-          <h2>Get in touch</h2>
-          <span className="rule" />
-        </div>
-
-        <div className="reveal">
-          <p className="contact-lead">Looking for a new grad SWE for 2027.</p>
-          <p className="contact-sub">
-            Backend, infrastructure, distributed systems. Fastest way to reach me is email —
-            everything else is below.
-          </p>
-
-          <div className="contact-cards">
-            {CARDS.map((c) => (
-              <a
-                className="contact-card"
-                key={c.title}
-                href={c.href}
-                {...(c.external ? { target: '_blank', rel: 'noreferrer' } : {})}
-              >
-                <span className="ic">{c.icon}</span>
-                <span className="txt">
-                  <b>{c.title}</b>
-                  <span>{c.sub}</span>
-                </span>
-                <span className="go">
-                  <ArrowIcon />
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="foot">
-          <span className="label">© {new Date().getFullYear()} Korede Afolami</span>
-          <span className="label">Built with React, TypeScript &amp; Vite</span>
-          <span className="foot-social">
+    <section className="section wrap" id="contact" ref={ref}>
+      <SecHead title="contact" />
+      <div className="reveal">
+        <p className="contact-copy">
+          Looking for a new grad software engineering role for 2027 — backend, infrastructure,
+          distributed systems. Email is the fastest way to reach me.
+        </p>
+        <div className="contact-grid">
+          {CARDS.map((c) => (
             <a
-              className="icon-btn"
-              href={PROFILE.github}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
+              className="ccard"
+              key={c.t}
+              href={c.href}
+              {...(c.ext ? { target: '_blank', rel: 'noreferrer' } : {})}
             >
-              <GitHubIcon />
+              <span className="ic">{c.icon}</span>
+              <span className="tx">
+                <b>{c.t}</b>
+                <span>{c.s}</span>
+              </span>
             </a>
-            <a
-              className="icon-btn"
-              href={PROFILE.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
-            >
-              <LinkedInIcon />
-            </a>
-          </span>
+          ))}
         </div>
+      </div>
+
+      <div className="foot">
+        <span className="m-sm">© {new Date().getFullYear()} korede afolami</span>
+        <span className="m-sm">react · typescript · vite</span>
       </div>
     </section>
   )
@@ -457,15 +378,14 @@ export default function App() {
   return (
     <>
       <Nav onBlog={openBlog} />
-
       <main>
         <Hero />
-        <Work />
+        <Experience />
         <Projects />
-        <About />
+        <Stack />
+        <Education />
         <Contact />
       </main>
-
       <BlogPanel open={blogOpen} onClose={closeBlog} />
     </>
   )

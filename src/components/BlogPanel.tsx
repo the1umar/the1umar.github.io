@@ -62,11 +62,10 @@ export function BlogPanel({ open, onClose }: Props) {
         aria-hidden={!open}
         inert={!open}
       >
-        <div className="blog-panel-head">
-          <div>
-            <span className="mono">Index — 006 entries</span>
-            <h2>Blog Posts</h2>
-          </div>
+        <div className="blog-head">
+          <h2>
+            <span className="hash">#</span> writing
+          </h2>
           <button
             ref={closeBtn}
             className="blog-close"
@@ -90,14 +89,13 @@ export function BlogPanel({ open, onClose }: Props) {
               key={post.n}
               style={{ ['--d' as string]: `${260 + i * 75}ms` }}
             >
-              <div className="blog-post-top">
-                <span className="mono">{post.n}</span>
-                <span className="mono">{post.meta}</span>
+              <div className="blog-top">
+                <span className="m-sm">{post.n}</span>
+                <span className="m-sm">{post.meta}</span>
               </div>
               <h3>{post.title}</h3>
               <p className="blog-kicker">{post.kicker}</p>
               <span className="blog-status" data-s={post.status}>
-                <span className="tick" />
                 {post.status}
               </span>
             </article>
@@ -105,9 +103,7 @@ export function BlogPanel({ open, onClose }: Props) {
         </div>
 
         <div className="blog-foot">
-          <span className="mono">
-            No RSS yet. No newsletter. No <em>subscribe</em> modal. Just this.
-          </span>
+          <span className="m-sm">no rss yet. no newsletter. no subscribe modal. just this.</span>
         </div>
       </aside>
     </>

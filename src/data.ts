@@ -17,6 +17,7 @@ export const PROFILE = {
 } as const
 
 export type Experience = {
+  mark: string
   org: string
   title: string
   place: string
@@ -29,6 +30,7 @@ export type Experience = {
 
 export const EXPERIENCE: Experience[] = [
   {
+    mark: 'C',
     org: 'Cisco',
     title: 'Software Engineer Intern',
     place: 'Boulder, CO',
@@ -43,6 +45,7 @@ export const EXPERIENCE: Experience[] = [
     stack: ['Go', 'Kubernetes', 'Istio', 'ArgoCD', 'Vault', 'Terraform'],
   },
   {
+    mark: 'S',
     org: 'Splunk',
     title: 'Software Engineer Intern',
     place: 'Boulder, CO',
@@ -56,6 +59,7 @@ export const EXPERIENCE: Experience[] = [
     stack: ['Python', 'AWS', 'Terraform', 'PostgreSQL', 'Prisma', 'GraphQL'],
   },
   {
+    mark: 'TT',
     org: 'Texas Tech University',
     title: 'Teaching Assistant — Computer Science',
     place: 'Lubbock, TX',

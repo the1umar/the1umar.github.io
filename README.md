@@ -2,7 +2,10 @@
 
 Personal site for Korede (Umar) Afolami — [the1umar.github.io](https://the1umar.github.io)
 
-Warm off-white paper, near-black ink, one molten accent (`#ff4a1c`).
+A single column, one repeated row, and a strict split of labour between two
+typefaces: mono carries every piece of metadata, sans carries every piece of
+prose. The accent appears in exactly three places — the section marker,
+organisation names, and list bullets.
 
 ## Stack
 
