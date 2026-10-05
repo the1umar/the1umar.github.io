@@ -6,6 +6,7 @@ import { useRevealGroup } from './hooks/useReveal'
 import { scrollToId, useSmoothScroll } from './hooks/useSmoothScroll'
 
 const SECTIONS = [
+  { id: 'about', label: 'about' },
   { id: 'experience', label: 'experience' },
   { id: 'projects', label: 'projects' },
   { id: 'stack', label: 'stack' },
@@ -56,10 +57,10 @@ function Nav({ onBlog }: { onBlog: () => void }) {
       <div className="wrap nav-in">
         <a
           className="nav-mark"
-          href="#top"
+          href="#about"
           onClick={(e) => {
             e.preventDefault()
-            scrollToId('top')
+            scrollToId('about')
           }}
         >
           <span className="br">[</span>ka<span className="br">]</span>
@@ -121,7 +122,7 @@ function Nav({ onBlog }: { onBlog: () => void }) {
 
 function Hero() {
   return (
-    <header className="hero wrap" id="top">
+    <header className="hero wrap" id="about">
       <span className="avatar">
         <img src={PROFILE.photo} alt={PROFILE.name} />
       </span>
@@ -158,8 +159,12 @@ function Hero() {
         </p>
         <p>
           Right now that means distributed systems, infrastructure, and the occasional compiler
-          assignment. Outside of that: ColorStack, TA office hours, and a blog I am perpetually
-          about to start.
+          assignment. I&rsquo;m also VP of ColorStack at Tech and I TA data structures, which is
+          a few hundred students a year.
+        </p>
+        <p>
+          Outside of that: pickleball, hiking, soccer, 3D printing, and writing — which is why
+          there is a writing tab with nothing in it yet.
         </p>
       </div>
     </header>
